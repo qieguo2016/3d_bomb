@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta name="author" content="Qieguo: www.cnblogs.com/qieguo">       	
+		<meta name="description" content="图片爆炸，酷炫动态效果，CSS3动画，HTML5性能优化">
+		<title>图片大爆炸--嚣张的索大</title>
+		<style type="text/css">
+			html, body {
+				margin: 0;
+				height: 100%;
+			}
+			.wrapper {
+				width: 160px;
+				margin: 100px auto 0;
+				position: relative;
+				cursor: pointer;
+				perspective: 250px;
+			}
+			.bomb {
+				position: absolute;
+				height: 10px;
+				width: 10px;
+			}
+		</style>
+	</head>
+	<body>
+		<a href="http://www.cnblogs.com/qieguo/">My blog</a>
+		<div class="wrapper" id="zd-wrap"></div>
+		
+		<script src="js/bomb.js" type="text/javascript" charset="utf-8"></script>
+		<script type="text/javascript">
+			var img = new Image();
+		    img.src = 'img/zoro.jpg';	//160*160，or you need to change wrapper's size
+		    img.onload = function () {
+		        var x = y = 0,
+		        	div = styleCtn = '',
+		    	    imgWidth = this.width,
+		       		imgHeight = this.height,
+		        	pwidth = pheight = 10,
+		        	nx = Math.floor(imgWidth / pwidth),		//x方向粒子个数
+		        	ny = Math.floor(imgHeight / pheight),	//y方向粒子个数
+					wrap = document.getElementById('zd-wrap');
+					
+				for (var i = 0, num = nx * ny; i < num; i++) {
+					x = (i % nx) * pwidth;
+					y = Math.floor(i / ny) * 10;
+					styleCtn = 'left: ' + x + 'px; top: ' + y + 'px; background-position: ' + (-x) + 'px ' + (-y) + 'px;';
+	                div = div + '<div class="bomb" style="background-image: url(' + this.src + '); ' + styleCtn + '"></div>';
+				}
+		        wrap.innerHTML = div;	//添加图片
+		        
+		        var particles = document.getElementsByClassName('bomb'),
+					i = particles.length,
+					e = new ParticlesTemplate();
+					
+			    while (i--) {
+			        e.add(particles[i], true);
+			    }
+				wrap.addEventListener('click', function () {
+				    e.go();
+				}, false);	//点击触发爆炸效果
+			};
+		</script>
+	</body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<meta content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no" name="viewport">
+		<meta name="author" content="Qieguo: www.cnblogs.com/qieguo">       	
+		<meta name="description" content="图片爆炸，酷炫动态效果，CSS3动画，HTML5性能优化">
+		<title>测试版本，性能更好</title>
+		<link rel="stylesheet" type="text/css" href="css/test.css"/>
+	</head>
+	<body>
+		<a href="index.html">another test</a>
+		<div class="test-wrap" id="zd-wrap">
+			<!--<div class="test-test"></div>-->
+		</div>
+		
+		<script type="text/javascript">
+			var wrap = document.getElementById('zd-wrap');
+		
+			var img = new Image();
+		    img.src = 'img/zoro.jpg';
+		    img.onload = function () {
+		        var x, y, div, styleCtn, imgWidth, imgHeight, pwidth, pheight, nx, ny;
+		        div = styleCtn =  '';
+		        imgWidth = this.width;
+		        imgHeight = this.height;
+		        pwidth = pheight = 10;
+		        
+		        nx = Math.floor(imgWidth / pwidth);		//x方向粒子个数
+		        ny = Math.floor(imgHeight / pheight);	//y方向粒子个数
+		        
+		        for (var i = 0; i < ny; i++) {
+					for (var n = 0; n < nx; n++) {
+						x = pwidth * n;
+						y = pheight * i;
+						//'width: ' + pwidth + 'px; height: ' + pheight + 'px; '
+						styleCtn = 'transform: translate3d(' + x + 'px,' + y + 'px,0); background-position: ' + (-x) + 'px ' + (-y) + 'px;';
+		                div = div + '<div class="test" style="background-image: url(' + this.src + '); ' + styleCtn + '"></div>';
+					}
+//					div = div + '<br/>';
+		        }
+		        wrap.innerHTML = div;	
+		        particles();
+			};
+			
+		function particles() {
+			var particles = document.getElementsByClassName('test');
+			var e = MakeExplosion();
+			var i = particles.length;
+		    while (i--) {
+		        e.add(particles[i]);
+		    }
+			document.getElementById('zd-wrap').addEventListener('click', function () {
+			    e.go();
+			}, false);
+		}
+		
+		
+		
+		
+		function MakeExplosion() {
+	        var _o = new ParticlesTemplate(),
+	        	_pageWidth = document.body.clientWidth,
+	        	_pageHeigth = document.body.clientHeight;
+				
+	        _o.parentAdd = _o.add;
+	        _o.add = function (node) {
+	            _o.parentAdd(node, true);
+	        }
+	
+	        _o.parentRevive = _o.revive;
+	        _o.revive = function (i) {
+	        	this.xs[i] = 150 - (i % 16) * 10;
+	            this.ys[i] = 150 - Math.floor(i / 16) * 10;
+	            this.zs[i] = 0;
+	            var xFactor = (this.xs[i] - 160/2 + 20) / (160/4);
+	            var yFactor = (this.ys[i] - 160/2 - 15) / (160/2);
+	        	
+//	            this.xs[i] = 0;
+//	            this.ys[i] = 0;
+//	            this.zs[i] = 0;
+//	            var xFactor = (parseInt(this.nodes[i].style.left) - 160/2 + 20) / (160/4);
+//	            var yFactor = (parseInt(this.nodes[i].style.top) - 160/2 - 15) / (160/2);
+	
+	            this.xvs[i] = (10 + Math.floor(Math.random() * 10)) * xFactor;
+	            this.yvs[i] = (10 + Math.floor(Math.random() * 10)) * yFactor;
+	            this.zvs[i] = -20 + Math.floor(Math.random() * 40);
+	
+	            _o.parentRevive(i);
+	        }
+	
+	        _o.shouldBeKilled = function (i) {
+	            return this.xs[i] < -_pageWidth || this.xs[i] > _pageWidth || this.ys[i] > _pageHeigth - 150;
+	        }
+	
+	        _o.parentKill = _o.kill;
+	        _o.kill = function (i) {
+	            this.xs[i] = -9999;
+	            _o.parentKill(i);
+	        }
+	
+	        _o.parentGo = _o.go;
+	        _o.go = function () {
+	            if (_o.activeCount) {
+	                _o.parentGo();
+	            }
+	        }
+	        
+	        _o.spin = true;
+	
+	        return _o;
+	    }
+
+
+   		function ParticlesTemplate() {
+	        var _self = this;
+			
+	        this.particleCount = 0;
+	        this.activeCount = 0;
+			
+	        this.nodes = [];
+	        this.alives = [];
+	        this.xs = [];
+	        this.ys = [];
+	        this.zs = [];
+	        this.xvs = [];
+	        this.yvs = [];
+	        this.zvs = [];
+	
+	        this.xa = 0;
+	        this.ya = 0.6;
+	        this.za = 0;
+	
+	        this.xf = 0.97;
+	        this.yf = 1;
+	        this.zf = 0.97;
+	
+	        this.timeToStop = false;
+	
+	        this.currentIndex = 0;
+	
+	        this.spin = false;
+	        
+	        this.transformProperty = false;
+	        this.vendorPrefix = false;
+	        this.support3D = false;
+	
+	        this.add = function (node, alive) {
+	            if (!this.transformProperty) {
+	                var properties = ['transform', 'WebkitTransform', 'msTransform', 'MozTransform', 'OTransform'];
+	                var p;
+	                while (p = properties.shift()) {
+	                    if (typeof node.style[p] != 'undefined') {
+	                        this.transformProperty = p;
+	                        if (p != 'transform') {
+	                            this.vendorPrefix = p.replace('Transform', '');
+	                        }
+	                        if (typeof node.style.perspective != 'undefined' || (this.vendorPrefix && typeof node.style[this.vendorPrefix + 'Perspective'] != 'undefined')) {
+	                            this.support3D = true;
+	                        }
+	                        break;
+	                    }
+	                }
+	            }
+	                    
+	            this.nodes.push(node);
+	
+	            var i = this.particleCount;
+	            this.particleCount++;
+	
+	            if (alive) {
+	                this.revive(i);
+	            } else {
+	                this.kill(i);
+	            }
+	        }
+	
+	        this.revive = function (i) {
+	            this.activeCount++;
+	            this.alives[i] = true;
+	        }
+	
+	        this.shouldBeKilled = function (i) {
+	        		return false;
+	        }
+	
+	        this.kill = function (i) {
+	            this.activeCount--;
+	            this.alives[i] = false;
+	        }
+	
+	        this.updateAll = function () {
+	            var i = this.particleCount;
+				
+	            while (i--) {
+	                if (this.alives[i]) {
+	                    this.xvs[i] += this.xa;
+	                    this.yvs[i] += this.ya;
+	                    this.zvs[i] += this.za;
+	
+	                    this.xvs[i] *= this.xf;
+	                    this.yvs[i] *= this.yf;
+	                    this.zvs[i] *= this.zf;
+	
+	                    this.xs[i] += this.xvs[i];
+	                    this.ys[i] += this.yvs[i];
+	                    this.zs[i] += this.zvs[i];
+	
+	                    if (this.shouldBeKilled(i)) {
+	                        this.kill(i);
+	                    }
+						
+						var s = 1 + this.zs[i] / 200;
+		                if (s < 0) { s = 0; }
+	                    if (this.support3D) {
+	                        this.nodes[i].style[this.transformProperty] = 'translate3d(' + this.xs[i] + 'px, ' + this.ys[i] + 'px, ' + this.zs[i] + 'px)' + (this.spin ? 'rotateX(' + Math.cos(0.01 * this.ys[i]) + 'rad) rotateY(' + Math.sin(0.01 * this.xs[i]) + 'rad)' : '');
+	                    } else {
+	                        this.nodes[i].style[this.transformProperty] = 'translate(' + this.xs[i] + 'px, ' + this.ys[i] + 'px) scale(' + s + ', ' + s + ')';
+	                    }
+	                }
+	            }
+	        }
+	
+	        var _t = 0;
+	        this.go = function () {
+	            if (_self.timeToStop) {
+	                _self.timeToStop = false;
+	                return;
+	            }
+	
+	            window.requestAnimationFrame(_self.go);
+	
+	            var nt = Date.now()
+	            if (nt - _t > 32) {
+	                _t = nt;
+	                _self.updateAll();
+	            }
+	        }
+	
+	        this.stop = function () {
+	            _self.timeToStop = true;
+	        }
+	    }
+			
+			
+			
+			function Particles() {
+				var _self = this;
+				
+		        this.particleCount = 0;
+		        this.activeCount = 0;
+				
+		        this.nodes = [];
+		        this.alives = [];
+		        this.xs = [];
+		        this.ys = [];
+		        this.zs = [];
+		        this.xvs = [];
+		        this.yvs = [];
+		        this.zvs = [];
+		
+		        this.xa = 0;
+		        this.ya = 0.6;
+		        this.za = 0;
+		
+		        this.xf = 0.97;
+		        this.yf = 1;
+		        this.zf = 0.97;
+		
+		        this.timeToStop = false;
+		
+		        this.currentIndex = 0;
+		
+		        this.spin = false;
+		        
+		        this.transformProperty = false;
+		        this.vendorPrefix = false;
+		        this.support3D = false;
+		        
+		        this.add = function (node, alive) {
+		            if (!this.transformProperty) {
+		                var properties = ['transform', 'WebkitTransform', 'msTransform', 'MozTransform', 'OTransform'];
+		                var p;
+		                while (p = properties.shift()) {
+		                    if (typeof node.style[p] != 'undefined') {
+		                        this.transformProperty = p;
+		                        if (p != 'transform') {
+		                            this.vendorPrefix = p.replace('Transform', '');
+		                        }
+		                        if (typeof node.style.perspective != 'undefined' || (this.vendorPrefix && typeof node.style[this.vendorPrefix + 'Perspective'] != 'undefined')) {
+		                            this.support3D = true;
+		                        }
+		                        break;
+		                    }
+		                }
+		            }
+		                    
+		            this.nodes.push(node);
+		
+		            var i = this.particleCount;
+		            this.particleCount++;
+		
+		            if (alive) { this.revive(i); } 
+		            else { this.kill(i); }
+		        }
+		        
+			}
+		
+			
+		</script>
+	</body>
+</html>

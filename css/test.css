@@ -1,0 +1,28 @@
+html, body {
+	margin: 0;
+	height: 100%;
+}
+.test-wrap {
+	width: 160px;
+	margin: 100px auto 0;
+	position: relative;
+	/* border: 2px solid black; */
+	cursor: pointer;
+	perspective: 250px;
+}
+.test {
+	position: absolute;
+	height: 10px;
+	width: 10px;
+	/*background-image: url(../img/zoro.jpg);*/
+}
+
+.test-test {
+	height: 50px;
+	width: 50px;
+	position: absolute;
+	/* left: 250px; */
+	/* top: 150px; */
+	background-color: green;
+	transform: translate3d(10px,10px,31px) rotateX(10deg) rotateY(50deg);
+}
