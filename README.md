@@ -3,6 +3,8 @@ Bomb Picture (3D)
 
 uh, it seems I need write something here...
 
+For more information: http://www.cnblogs.com/qieguo/
+
 Demo
 ---
 
