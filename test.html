@@ -11,37 +11,39 @@
 	<body>
 		<a href="index.html">another test</a>
 		<div class="test-wrap" id="zd-wrap">
-			<!--<div class="test-test"></div>-->
+			<div class="test-one"></div>
+			<div class="test-two"></div>
+			<div class="test-third"></div>
 		</div>
 		
 		<script type="text/javascript">
 			var wrap = document.getElementById('zd-wrap');
 		
-			var img = new Image();
-		    img.src = 'img/zoro.jpg';
-		    img.onload = function () {
-		        var x, y, div, styleCtn, imgWidth, imgHeight, pwidth, pheight, nx, ny;
-		        div = styleCtn =  '';
-		        imgWidth = this.width;
-		        imgHeight = this.height;
-		        pwidth = pheight = 10;
-		        
-		        nx = Math.floor(imgWidth / pwidth);		//x方向粒子个数
-		        ny = Math.floor(imgHeight / pheight);	//y方向粒子个数
-		        
-		        for (var i = 0; i < ny; i++) {
-					for (var n = 0; n < nx; n++) {
-						x = pwidth * n;
-						y = pheight * i;
-						//'width: ' + pwidth + 'px; height: ' + pheight + 'px; '
-						styleCtn = 'transform: translate3d(' + x + 'px,' + y + 'px,0); background-position: ' + (-x) + 'px ' + (-y) + 'px;';
-		                div = div + '<div class="test" style="background-image: url(' + this.src + '); ' + styleCtn + '"></div>';
-					}
-//					div = div + '<br/>';
-		        }
-		        wrap.innerHTML = div;	
-		        particles();
-			};
+//			var img = new Image();
+//		    img.src = 'img/zoro.jpg';
+//		    img.onload = function () {
+//		        var x, y, div, styleCtn, imgWidth, imgHeight, pwidth, pheight, nx, ny;
+//		        div = styleCtn =  '';
+//		        imgWidth = this.width;
+//		        imgHeight = this.height;
+//		        pwidth = pheight = 10;
+//		        
+//		        nx = Math.floor(imgWidth / pwidth);		//x方向粒子个数
+//		        ny = Math.floor(imgHeight / pheight);	//y方向粒子个数
+//		        
+//		        for (var i = 0; i < ny; i++) {
+//					for (var n = 0; n < nx; n++) {
+//						x = pwidth * n;
+//						y = pheight * i;
+//						//'width: ' + pwidth + 'px; height: ' + pheight + 'px; '
+//						styleCtn = 'transform: translate3d(' + x + 'px,' + y + 'px,0); background-position: ' + (-x) + 'px ' + (-y) + 'px;';
+//		                div = div + '<div class="test" style="background-image: url(' + this.src + '); ' + styleCtn + '"></div>';
+//					}
+////					div = div + '<br/>';
+//		        }
+//		        wrap.innerHTML = div;	
+//		        particles();
+//			};
 			
 		function particles() {
 			var particles = document.getElementsByClassName('test');

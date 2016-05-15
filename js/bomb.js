@@ -1,7 +1,7 @@
 /*-----------------------------【程序说明】-----------------------------
  *	程序说明：	图片爆炸立体效果
  *	浏览器支持：Chrome、Firefox、Safari、国产主流移动浏览器（性能较差）
- *	2016年05月 Created by @Qieguo
+ *	Created by Qieguo on 2016-05-15.
  *	更多信息请关注我的博客：http://www.cnblogs.com/qieguo/
  *
  *	Reference: Zachstronaut LLC @ http://www.zachstronaut.com/
@@ -10,38 +10,87 @@
  */
 
 function ParticlesTemplate() {
-        var that = this,
-        	_halfPageWidth = document.body.clientWidth / 2,
-        	_pageHeigth = document.body.clientHeight;
-		
-        this.particleCount = 0;
-        this.activeCount = 0;
-		
-        this.nodes = [];
-        this.alives = [];
-        this.xs = [];
-        this.ys = [];
-        this.zs = [];
-        this.xvs = [];
-        this.yvs = [];
-        this.zvs = [];
+    var that = this,
+    	_halfPageWidth = document.body.clientWidth / 2,
+    	_pageHeigth = document.body.clientHeight;
+	
+    this.particleCount = 0;
+    this.activeCount = 0;
+	
+    this.nodes = [];
+    this.alives = [];
+    this.xs = [];
+    this.ys = [];
+    this.zs = [];
+    this.xvs = [];
+    this.yvs = [];
+    this.zvs = [];
 
-        this.xa = 0;
-        this.ya = 0.6;
-        this.za = 0.2;
+    this.xa = 0;		//x axis acceleration
+    this.ya = 0.6;		//y axis acceleration
+    this.za = 0.2;		//z axis acceleration
 
-        this.xf = 0.97;
-        this.yf = 1;
-        this.zf = 0.97;
+    this.xf = 0.97;		//x axis force
+    this.yf = 1;		//y axis force
+    this.zf = 0.97;		//z axis force
 
-        this.timeToStop = false;
-        this.transformProperty = false;
-        this.vendorPrefix = false;
-        this.support3D = false;
+    this.timeToStop = false;
+    this.transformProperty = false;
+    this.vendorPrefix = false;
+    this.support3D = false;
+	
+	//make particles
+	this.init = function (exploreImg, wrapper) {
+		var pwidth = pheight = 10,		//particle's size
+			x = y = 0,
+        	div = styleCtn = '',
+    	    imgWidth = exploreImg.width,
+    	    imgHeight = exploreImg.height,
+       		nx = Math.floor(imgWidth / pwidth),
+        	ny = Math.floor(imgHeight / pheight);
+        	
+		for (var i = 0, num = nx * ny; i < num; i++) {
+			x = (i % nx) * pwidth;
+			y = Math.floor(i / ny) * pheight;
+			styleCtn = 'left: ' + x + 'px; top: ' + y + 'px; background-position: ' + (-x) + 'px ' + (-y) + 'px;';
+            div = div + '<div class="bomb" style="background-image: url(' + exploreImg.src + '); ' + styleCtn + '"></div>';
+		}
+        wrapper.innerHTML = div;	//add particles to wrapper
+        
+        var particles = document.getElementsByClassName('bomb'),
+			i = particles.length;
+	    while (i--) {
+	        this._add(particles[i], true);
+	    }
+	};
+	
+	//start animation
+	var _t = 0;
+    this.go = function () {
+    	if (that.activeCount) {
+            if (that.timeToStop) {
+                return that.timeToStop = false;
+            }
+            
+            window.requestAnimationFrame(that.go);
 
-        this.add = function (node) {
-            if (!this.transformProperty) {
-                var p, properties = ['transform', 'WebkitTransform', 'msTransform', 'MozTransform', 'OTransform'];
+            var nt = Date.now()
+            if (nt - _t > 32) {
+                _t = nt;
+                that._updateAll();
+            }
+       	}
+    }
+
+	//stop animation
+    this.stop = function () {
+        that.timeToStop = true;
+    }
+	
+	//add nodes to particles
+    this._add = function (node) {
+        if (!this.transformProperty) {
+            var p, properties = ['transform', 'WebkitTransform', 'msTransform', 'MozTransform', 'OTransform'];
             while (p = properties.shift()) {
                 if (typeof node.style[p] != 'undefined') {
                     this.transformProperty = p;
@@ -59,11 +108,12 @@ function ParticlesTemplate() {
         this.nodes.push(node);
 
         var i = this.particleCount;
-        this.revive(i);
+        this._revive(i);
         this.particleCount++;
     }
-
-    this.revive = function (i) {
+	
+	//initialize particle's coordinate and speed
+    this._revive = function (i) {
     	this.xs[i] = 0;
         this.ys[i] = 0;
         this.zs[i] = 0;
@@ -76,8 +126,9 @@ function ParticlesTemplate() {
         this.activeCount++;
         this.alives[i] = true;
     }
-
-    this.shouldBeKilled = function (i) {
+    
+	//judge whether particle[i] should be killed or not
+    this._shouldBeKilled = function (i) {
     	if (this.xs[i] < -_halfPageWidth || this.xs[i] > _halfPageWidth || this.ys[i] > _pageHeigth) {
     		this.xs[i] = -9999;
         	this.ys[i] = 0;
@@ -85,8 +136,9 @@ function ParticlesTemplate() {
             this.alives[i] = false;
     	}
     }
-
-    this.updateAll = function () {
+	
+	//update particle's coordinate and speed
+    this._updateAll = function () {
         var i = this.particleCount;
         while (i--) {
             if (this.alives[i]) {
@@ -102,7 +154,7 @@ function ParticlesTemplate() {
                 this.ys[i] += this.yvs[i];
                 this.zs[i] += this.zvs[i];
 		
-				this.shouldBeKilled(i);
+				this._shouldBeKilled(i);
 				
 				var s = 1 + this.zs[i] / 200;
                 if (s < 0) { s = 0; }
@@ -115,24 +167,4 @@ function ParticlesTemplate() {
         }
     }
 
-    var _t = 0;
-    this.go = function () {
-    	if (that.activeCount) {
-            if (that.timeToStop) {
-                return that.timeToStop = false;
-            }
-            
-            window.requestAnimationFrame(that.go);
-
-            var nt = Date.now()
-            if (nt - _t > 32) {
-                _t = nt;
-                that.updateAll();
-            }
-       	}
-    }
-
-    this.stop = function () {
-        that.timeToStop = true;
-    }
 }
