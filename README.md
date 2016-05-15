@@ -1,7 +1,30 @@
 Bomb Picture (3D)
 ---
 
-uh, it seems I need write something here...
+You can use it like this: 
+	<style type="text/css">
+		.wrapper {
+			position: relative;
+			cursor: pointer;
+			perspective: 250px;
+		}
+	</style>
+	
+	<div class="wrapper" id="zd-wrap"></div>
+			
+	<script src="js/bomb.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var explore = new ParticlesTemplate(),
+			exploreImg = new Image(),
+			wrapper = document.getElementById('zd-wrap');
+		exploreImg.src = 'img/zoro.jpg';	
+		exploreImg.onload = function () {
+			explore.init(exploreImg, wrapper);
+			wrapper.addEventListener('click', function () {
+				explore.go();
+			}, false);
+		};
+	</script>
 
 For more information: http://www.cnblogs.com/qieguo/
 
