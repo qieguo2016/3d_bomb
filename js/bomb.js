@@ -47,13 +47,20 @@ function ParticlesTemplate() {
     	    imgWidth = exploreImg.width,
     	    imgHeight = exploreImg.height,
        		nx = Math.floor(imgWidth / pwidth),
-        	ny = Math.floor(imgHeight / pheight);
-        	
+        	ny = Math.floor(imgHeight / pheight),
+        	head = document.head || document.getElementsByTagName('head')[0],
+        	bombStyle = document.createElement('style');
+        
+        //define common style
+        bombStyle.type = 'text/css';
+        bombStyle.appendChild(document.createTextNode('.bomb { position: absolute; height: 10px; width: 10px; background-image: url(' + exploreImg.src + '); }'));
+        head.appendChild(bombStyle);
+        
 		for (var i = 0, num = nx * ny; i < num; i++) {
 			x = (i % nx) * pwidth;
 			y = Math.floor(i / ny) * pheight;
 			styleCtn = 'left: ' + x + 'px; top: ' + y + 'px; background-position: ' + (-x) + 'px ' + (-y) + 'px;';
-            div = div + '<div class="bomb" style="background-image: url(' + exploreImg.src + '); ' + styleCtn + '"></div>';
+            div = div + '<div class="bomb" style="' + styleCtn + '"></div>';
 		}
         wrapper.innerHTML = div;	//add particles to wrapper
         
