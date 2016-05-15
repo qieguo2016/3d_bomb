@@ -2,6 +2,7 @@ Bomb Picture (3D)
 ---
 
 You can use it like this: 
+
 	<style type="text/css">
 		.wrapper {
 			position: relative;
