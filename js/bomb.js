@@ -27,8 +27,8 @@ function ParticlesTemplate() {
     this.zvs = [];
 
     this.xa = 0;		//x axis acceleration
-    this.ya = 0.6;		//y axis acceleration
-    this.za = 0.2;		//z axis acceleration
+    this.ya = 0.3;		//y axis acceleration
+    this.za = 0.5;		//z axis acceleration
 
     this.xf = 0.97;		//x axis force
     this.yf = 1;		//y axis force
@@ -136,7 +136,7 @@ function ParticlesTemplate() {
     
 	//judge whether particle[i] should be killed or not
     this._shouldBeKilled = function (i) {
-    	if (this.xs[i] < -_halfPageWidth || this.xs[i] > _halfPageWidth || this.ys[i] > _pageHeigth) {
+    	if (this.xs[i] < -_halfPageWidth || this.xs[i] > _halfPageWidth || this.ys[i] > _pageHeigth || this.zs[i] > 500) {
     		this.xs[i] = -9999;
         	this.ys[i] = 0;
             this.activeCount--;
