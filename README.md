@@ -8,7 +8,7 @@ For more information: http://www.cnblogs.com/qieguo/
 Demo
 ---
 
-See it in action: http://qieguo2016.github.io/3dBomb/
+See it in action: http://qieguo2016.github.io/3d_bomb/
 
 Screenshot
 ---

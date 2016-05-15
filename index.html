@@ -16,52 +16,28 @@
 				margin: 100px auto 0;
 				position: relative;
 				cursor: pointer;
-				perspective: 250px;
-			}
-			.bomb {
-				position: absolute;
-				height: 10px;
-				width: 10px;
+				perspective: 200px;
 			}
 		</style>
 	</head>
 	<body>
-		<a href="http://www.cnblogs.com/qieguo/">My blog</a>
+		<!--Created by Qieguo on 2016-05-15. http://www.cnblogs.com/qieguo/-->
 		<div class="wrapper" id="zd-wrap"></div>
 		
 		<script src="js/bomb.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript">
-			var img = new Image();
-		    img.src = 'img/zoro.jpg';	//160*160，or you need to change wrapper's size
-		    img.onload = function () {
-		        var x = y = 0,
-		        	div = styleCtn = '',
-		    	    imgWidth = this.width,
-		       		imgHeight = this.height,
-		        	pwidth = pheight = 10,
-		        	nx = Math.floor(imgWidth / pwidth),		//x方向粒子个数
-		        	ny = Math.floor(imgHeight / pheight),	//y方向粒子个数
-					wrap = document.getElementById('zd-wrap');
-					
-				for (var i = 0, num = nx * ny; i < num; i++) {
-					x = (i % nx) * pwidth;
-					y = Math.floor(i / ny) * 10;
-					styleCtn = 'left: ' + x + 'px; top: ' + y + 'px; background-position: ' + (-x) + 'px ' + (-y) + 'px;';
-	                div = div + '<div class="bomb" style="background-image: url(' + this.src + '); ' + styleCtn + '"></div>';
-				}
-		        wrap.innerHTML = div;	//添加图片
-		        
-		        var particles = document.getElementsByClassName('bomb'),
-					i = particles.length,
-					e = new ParticlesTemplate();
-					
-			    while (i--) {
-			        e.add(particles[i], true);
-			    }
-				wrap.addEventListener('click', function () {
-				    e.go();
-				}, false);	//点击触发爆炸效果
+		
+			var explore = new ParticlesTemplate(),
+				exploreImg = new Image(),
+				wrapper = document.getElementById('zd-wrap');
+			exploreImg.src = 'img/zoro.jpg';	//160*160，or you need to change wrapper's size
+			exploreImg.onload = function () {
+				explore.init(exploreImg, wrapper);
+				wrapper.addEventListener('click', function () {
+				    explore.go();
+				}, false);
 			};
+		
 		</script>
 	</body>
 </html>
